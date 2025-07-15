@@ -11,6 +11,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -36,5 +38,20 @@ public class UserService {
         user.setBod(updateUserRequest.getBod());
 
         return userRepository.save(user);
+    }
+
+    public List<User> getAll(){
+        return userRepository.findAll();
+    }
+
+    public User getById(int id){
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+    }
+
+    public void delete(int id){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        userRepository.delete(user);
     }
 }

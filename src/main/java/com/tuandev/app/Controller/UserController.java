@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
@@ -24,5 +27,24 @@ public class UserController {
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody UpdateUserRequest updateUserRequest){
         User user = userService.update(id, updateUserRequest);
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers(){
+        List<User> users = userService.getAll();
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUser(@PathVariable int id){
+        User user = userService.getById(id);
+        return ResponseEntity.ok(user);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable int id){
+        userService.delete(id);
+        String a = "User with id = " + id + " has been deleted successfully.";
+        return ResponseEntity.ok(a);
     }
 }
