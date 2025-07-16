@@ -19,15 +19,25 @@ public class SecurityConfig {
             "/api/v1/users/**", "/auth/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**", "/webjars/**"
     };
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(request ->
-                request.requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-                        .anyRequest().authenticated()
-        );
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+//        httpSecurity.authorizeHttpRequests(request ->
+//                request.requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+//                        .anyRequest().authenticated()
+//        );
+//        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+//
+//        return httpSecurity.build();
+//    }
 
-        return httpSecurity.build();
+    @Bean
+    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+        http
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth -> auth
+                .anyRequest().permitAll()
+            );
+        return http.build();
     }
 
     @Bean
