@@ -1,5 +1,6 @@
 package com.tuandev.app.Service;
 
+import com.tuandev.app.Constants.User.UserStatus;
 import com.tuandev.app.Dto.Request.CreateUserRequest;
 import com.tuandev.app.Dto.Request.UpdateUserRequest;
 import com.tuandev.app.Entity.User;
@@ -24,6 +25,7 @@ public class UserService {
     public User create(CreateUserRequest createUserRequest){
         User user = userMapper.toUser(createUserRequest);
         user.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
+        user.setIsActive(UserStatus.ACTIVE.getValue());
         return userRepository.save(user);
     }
 
@@ -41,7 +43,7 @@ public class UserService {
     }
 
     public List<User> getAll(){
-        return userRepository.findAll();
+        return userRepository.findByIsActive(UserStatus.ACTIVE.getValue());
     }
 
     public User getById(int id){
@@ -53,5 +55,12 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         userRepository.delete(user);
+    }
+
+    public void deactivateUser(int id){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        user.setIsActive(UserStatus.INACTIVE.getValue());
+        userRepository.save(user);
     }
 }

@@ -45,7 +45,12 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable int id){
         userService.delete(id);
-        String a = "User with id = " + id + " has been deleted successfully.";
-        return ResponseEntity.ok(a);
+        return ResponseEntity.ok("User with id = " + id + " has been deleted successfully.");
+    }
+
+    @PatchMapping("/de-activate/{id}")
+    public ResponseEntity<String> deactivateUser(@PathVariable int id){
+        userService.deactivateUser(id);
+        return ResponseEntity.ok("User with id = " + id + " has been deactivated successfully.");
     }
 }
