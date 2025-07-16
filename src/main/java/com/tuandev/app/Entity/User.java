@@ -27,4 +27,5 @@ public class User {
     int gender;
     String phoneNumber;
     LocalDate bod;
+    int isActive = 0;
 }
