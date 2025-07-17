@@ -23,6 +23,9 @@ public class UserService {
     PasswordEncoder passwordEncoder;
 
     public User create(CreateUserRequest createUserRequest){
+        if (userRepository.findByUsername(createUserRequest.getUsername()).isPresent())
+            throw new RuntimeException("Username already exists: " + createUserRequest.getUsername());
+
         User user = userMapper.toUser(createUserRequest);
         user.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
         user.setIsActive(UserStatus.ACTIVE.getValue());
