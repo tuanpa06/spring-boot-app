@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -14,19 +13,23 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "users")
-public class User {
+@Table(name = "accounts")
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    @Column(name = "username",unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
-    String username;
-    String password;
-    String email;
-    int gender;
-    String phoneNumber;
-    LocalDate bod;
+
+    @ManyToOne
+    @JoinColumn(name = "userId", referencedColumnName = "id")
+    User user;
+
+    @ManyToOne
+    @JoinColumn(name = "bankId", referencedColumnName = "id")
+    Bank bank;
+
+    String number;
+    int balance;
     int isActive = 1;
-    String address;
-    int identity;
+    LocalDate createdAt;
+    LocalDate updatedAt;
 }
