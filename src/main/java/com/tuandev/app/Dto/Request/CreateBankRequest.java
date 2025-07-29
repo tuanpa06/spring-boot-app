@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class CreateBankRequest {
-    @NotBlank(message = "Username cannot be blank")
+    @NotBlank(message = "Bank name cannot be blank")
     String name;
     String code;
     String description;
