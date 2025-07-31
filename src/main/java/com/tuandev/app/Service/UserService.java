@@ -4,6 +4,7 @@ import com.tuandev.app.Constants.User.UserStatus;
 import com.tuandev.app.Dto.Request.CreateUserRequest;
 import com.tuandev.app.Dto.Request.UpdateUserRequest;
 import com.tuandev.app.Entity.User;
+import com.tuandev.app.Exception.ResourceNotFoundException;
 import com.tuandev.app.Mapper.UserMapper;
 import com.tuandev.app.Repository.UserRepository;
 import lombok.AccessLevel;
@@ -30,7 +31,7 @@ public class UserService {
 
     public User update(int id, UpdateUserRequest updateUserRequest){
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         user.setPassword(passwordEncoder.encode(updateUserRequest.getPassword()));
         user.setEmail(updateUserRequest.getEmail());
@@ -47,18 +48,18 @@ public class UserService {
 
     public User getById(int id){
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
     }
 
     public void delete(int id){
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
         userRepository.delete(user);
     }
 
     public void deactivateUser(int id){
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
         user.setIsActive(UserStatus.INACTIVE.getValue());
         userRepository.save(user);
     }
