@@ -28,6 +28,12 @@ public class AccountController {
         List<Account> accounts = accountService.getAll();
         return ResponseEntity.ok(accounts);
     }
+
+    @PatchMapping("/de-activate/{id}")
+    public ResponseEntity<String> deactivateUser(@PathVariable int id){
+        accountService.deactivateAccount(id);
+        return ResponseEntity.ok("Account with id = " + id + " has been deactivated successfully.");
+    }
 }
 
 

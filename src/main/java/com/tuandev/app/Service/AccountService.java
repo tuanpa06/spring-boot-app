@@ -6,6 +6,7 @@ import com.tuandev.app.Dto.Request.CreateAccountRequest;
 import com.tuandev.app.Entity.Account;
 import com.tuandev.app.Entity.Bank;
 import com.tuandev.app.Entity.User;
+import com.tuandev.app.Exception.ResourceNotFoundException;
 import com.tuandev.app.Repository.AccountRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +38,16 @@ public class AccountService {
 
     public List<Account> getAll(){
         return accountRepository.findAll();
+    }
+
+    public Account getById(int id){
+        return accountRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Account not found with id: " + id));
+    }
+
+    public void deactivateAccount(int id){
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Account not found with id: " + id));
+        accountRepository.save(account);
     }
 }
