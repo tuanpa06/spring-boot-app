@@ -48,6 +48,7 @@ public class AccountService {
     public void deactivateAccount(int id){
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Account not found with id: " + id));
+        account.setIsActive(UserStatus.INACTIVE.getValue());
         accountRepository.save(account);
     }
 }
