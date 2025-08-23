@@ -14,3 +14,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+jwt:
+  signerKey: "AyblbfPcH2jUsn2IVekHN1XV63jTfimDu9eapk49oor72G5XVGa0ZZxgFnhgPFIG"
+  valid-duration: 3600 #in second
