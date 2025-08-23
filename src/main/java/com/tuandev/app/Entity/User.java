@@ -5,7 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-import java.util.Date;
+
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
@@ -28,4 +28,6 @@ public class User {
     int isActive = 1;
     String address;
     int identity;
+    @ManyToOne
+    Role role;
 }
