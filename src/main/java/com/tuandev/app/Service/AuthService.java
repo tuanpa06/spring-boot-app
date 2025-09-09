@@ -2,10 +2,13 @@ package com.tuandev.app.Service;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 import com.tuandev.app.Dto.Request.AuthenticationRequest;
 import com.tuandev.app.Entity.User;
 import com.tuandev.app.Exception.ResourceNotFoundException;
+import com.tuandev.app.Exception.TokenInvalidException;
 import com.tuandev.app.Repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.naming.AuthenticationException;
+import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -41,7 +45,7 @@ public class AuthService {
     UserRepository userRepository;
 
     String buildScope(User user){
-        StringJoiner stringJoiner = new StringJoiner("");
+        StringJoiner stringJoiner = new StringJoiner(" ");
         var roles = user.getRole();
         if (roles != null){
             stringJoiner.add("ROLE_" + roles.getName());
@@ -85,5 +89,28 @@ public class AuthService {
             throw new AuthenticationException("Authenticated fail");
 
         return generateToken(user);
+    }
+
+    SignedJWT verifyToken(String token) throws JOSEException, ParseException {
+        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+        SignedJWT signedJWT = SignedJWT.parse(token);
+
+        Date expiredTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+        var verify = signedJWT.verify(verifier);
+
+        if(!(verify && expiredTime.after(new Date())))
+            throw new TokenInvalidException("Token invalid!");
+
+        return signedJWT;
+    }
+
+    public boolean introspect(String token) throws JOSEException, ParseException {
+        boolean isValid = true;
+        try {
+            verifyToken(token);
+        } catch (TokenInvalidException e) {
+            isValid = false;
+        }
+        return isValid;
     }
 }

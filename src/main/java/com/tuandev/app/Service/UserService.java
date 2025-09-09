@@ -31,6 +31,7 @@ public class UserService {
     public User create(CreateUserRequest createUserRequest){
         User user = userMapper.toUser(createUserRequest);
         user.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
+        user.setIsActive(1);
         Role role = roleRepository.findById(Roles.USER.getValue());
         user.setRole(role);
         return userRepository.save(user);
@@ -49,6 +50,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @PreAuthorize("hasAuthority('user:getAll')")
     public List<User> getAll(){
         return userRepository.findByIsActive(UserStatus.ACTIVE.getValue());
     }
