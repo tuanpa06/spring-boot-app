@@ -1,10 +1,8 @@
 package com.tuandev.app.Entity;
 
 import jakarta.persistence.*;
-import jdk.jfr.StackTrace;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.validator.constraints.UUID;
 
 import java.util.Set;
 
